@@ -97,10 +97,16 @@ const Header = () => {
                   onClick={() => setShowUserMenu(!showUserMenu)}
                 >
                   {isAdmin ? "👑" : "👤"}{" "}
-                  {user?.firstName ||
-                    user?.name ||
-                    user?.username ||
-                    "Kullanıcı"}
+                  {user?.firstName && user.firstName.toLowerCase() !== "admin"
+                    ? user.firstName
+                    : user?.name && String(user.name).toLowerCase() !== "admin"
+                      ? user.name
+                      : user?.username &&
+                          String(user.username).toLowerCase() !== "admin"
+                        ? user.username
+                        : isAdmin
+                          ? "Hesabım"
+                          : "Kullanıcı"}
                   <span className="dropdown-arrow">▼</span>
                 </button>
 

@@ -13,6 +13,7 @@ import OrdersPage from "./pages/OrdersPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AdminPage from "./pages/AdminPage";
 import DebugPage from "./pages/DebugPage";
 import JwtDebugPage from "./pages/JwtDebugPage";
 import AuthDebugPage from "./pages/AuthDebugPage";
@@ -97,10 +98,7 @@ function App() {
               path="/admin"
               element={
                 <ProtectedRoute>
-                  <div className="container mt-4">
-                    <h2>⚙️ Admin Panel</h2>
-                    <p>Admin paneli geliştirme aşamasında...</p>
-                  </div>
+                  <AdminPage />
                 </ProtectedRoute>
               }
             />

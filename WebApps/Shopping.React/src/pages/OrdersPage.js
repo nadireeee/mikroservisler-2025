@@ -71,6 +71,34 @@ const OrdersPage = () => {
     }
   };
 
+  const getShipping = (order) => {
+    const nested = order.shippingAddress || order.ShippingAddress || {};
+    return {
+      firstName: nested.firstName || nested.FirstName || order.firstName || "",
+      lastName: nested.lastName || nested.LastName || order.lastName || "",
+      emailAddress:
+        nested.emailAddress ||
+        nested.EmailAddress ||
+        order.emailAddress ||
+        order.email ||
+        "",
+      addressLine:
+        nested.addressLine ||
+        nested.AddressLine ||
+        order.addressLine ||
+        "",
+      state: nested.state || nested.State || order.state || "",
+      country: nested.country || nested.Country || order.country || "",
+    };
+  };
+
+  const formatAddress = (ship) => {
+    return [ship.addressLine, ship.state, ship.country]
+      .map((x) => (x || "").trim())
+      .filter(Boolean)
+      .join(", ");
+  };
+
   if (loading) {
     return <div className="loading">📦 Siparişleriniz yükleniyor... ✨</div>;
   }
@@ -92,7 +120,11 @@ const OrdersPage = () => {
 
       {orders.length > 0 ? (
         <div className="orders-list">
-          {orders.map((order) => (
+          {orders.map((order) => {
+            const ship = getShipping(order);
+            const fullName = `${ship.firstName} ${ship.lastName}`.trim();
+            const address = formatAddress(ship);
+            return (
             <div key={order.id} className="order-card">
               <div className="order-header">
                 <div className="order-info">
@@ -113,17 +145,13 @@ const OrdersPage = () => {
                 <div className="customer-info">
                   <h4>👤 Müşteri Bilgileri</h4>
                   <p>
-                    <strong>Ad:</strong> {order.shippingAddress?.firstName}{" "}
-                    {order.shippingAddress?.lastName}
+                    <strong>Ad:</strong> {fullName || "—"}
                   </p>
                   <p>
-                    <strong>E-posta:</strong>{" "}
-                    {order.shippingAddress?.emailAddress}
+                    <strong>E-posta:</strong> {ship.emailAddress || "—"}
                   </p>
                   <p>
-                    <strong>Adres:</strong> {order.shippingAddress?.addressLine}
-                    , {order.shippingAddress?.state},{" "}
-                    {order.shippingAddress?.country}
+                    <strong>Adres:</strong> {address || "—"}
                   </p>
                 </div>
 
@@ -149,7 +177,8 @@ const OrdersPage = () => {
                 </div>
               </div>
             </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="no-orders">
